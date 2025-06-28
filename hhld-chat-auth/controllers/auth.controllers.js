@@ -1,4 +1,5 @@
 import userModel from "../models/user.model.js";
+import generateToken from "../utils/generateToken.js"
 import bcrypt from 'bcrypt'
 
 
@@ -11,6 +12,7 @@ async function signup(req, res) {
             res.status(400).json("user already exist.");
         }
         const user = new userModel({username, password: hashedPassword});
+        generateToken(user._id, res);
         await user.save();
         res.status(201).json({message: "user created success"});
 
