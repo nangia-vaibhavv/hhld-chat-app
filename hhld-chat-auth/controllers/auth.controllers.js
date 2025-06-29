@@ -9,7 +9,7 @@ async function signup(req, res) {
         const hashedPassword = await bcrypt.hash(password, 10);
         const checkIfUserExist = await userModel.findOne({username});
         if(checkIfUserExist) {
-            res.status(400).json("user already exist.");
+            res.status(400).json({message: "user already exist"});
         }
         const user = new userModel({username, password: hashedPassword});
         generateToken(user._id, res);
