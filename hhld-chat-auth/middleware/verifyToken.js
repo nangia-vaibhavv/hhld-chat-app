@@ -9,6 +9,7 @@ export async function verifyToken(req, res, next) {
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
         next();
     } catch(err) {
-        console.log("error occured while verify token", err)
+        // console.log("error occured while verify token", err)
+        throw err;
     }
 }

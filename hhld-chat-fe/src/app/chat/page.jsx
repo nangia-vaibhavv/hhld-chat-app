@@ -2,11 +2,26 @@
 import React, { useState, useEffect } from 'react';
 import io from "socket.io-client";
 import { useAuthStore } from '../zustand/useAuthStore.js'
+import { useUsersStore } from '../zustand/useUsersStore.js';
+import axios from 'axios';
+import ChatUsers from '../_components/chatUsers.jsx';
+import { useChatReceiverStore }  from '../zustand/useChatReceiverStore.js'
 const Chat = () => {
     const [msgs, setMsgs] = useState([]);
     const [msg, setMsg] = useState('');
     const [socket, setSocket] = useState(null);
     const { authName, updateAuthname} = useAuthStore();
+    const { users, updateUsers } = useUsersStore();
+    const { chatReceiver } = useChatReceiverStore();
+    const getUsersData = async () => {
+        const res = await axios.get('http://localhost:8081/users', {
+            withCredentials: true
+        });
+        updateUsers(res.data.userList);
+        console.log(users, "set")
+
+    }
+
     useEffect(() => {
         const newSocket = io('http://localhost:8080', {
             query: {
@@ -20,8 +35,10 @@ const Chat = () => {
                     false
             }]);
         });
+
+        getUsersData();
         return () => newSocket.close();
-    }, []);
+    }, [authName]);
     const sendMsg = (e) => {
         e.preventDefault();
         const msgToBeSent = {
@@ -38,7 +55,14 @@ const Chat = () => {
         }
     }
     return (
-        <div className='h-screen flex flex-col'>
+        <div className='h-screen flex'>
+        <div className='w-1/5 bg-amber-300'> 
+        <ChatUsers/>
+        </div>
+        <div>
+            <h1>{authName} chat between {chatReceiver} </h1>
+        </div>
+        <div className='w-4/5 flex flex-col bg-amber-200'>
             <div className='msgs-container h-4/5 overflow-scroll'>
                 {msgs.map((msg, index) => (
                     <div key={index} className={` m-3 ${msg.sentByCurrUser ?
@@ -73,6 +97,7 @@ dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                     </div>
                 </form>
             </div>
+        </div>
         </div>
     )
 }
