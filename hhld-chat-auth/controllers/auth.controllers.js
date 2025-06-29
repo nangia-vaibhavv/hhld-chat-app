@@ -18,6 +18,7 @@ export async function signup(req, res) {
 
     } catch(err) {
         console.log("error occured while doing signup", JSON.stringify(err));
+        throw err;
     }
 }
 
@@ -31,10 +32,11 @@ export async function login(req, res) {
         const passwordMatch = await bcrypt.compare(password, checkIfUserExist?.password);
         if(!passwordMatch) {
             res.status(401).json({message: "invalid creds"});
-        }
+        } 
         generateToken(checkIfUserExist?._id, res);
         res.status(200).json({message: "login success", _id: checkIfUserExist?._id, username: checkIfUserExist?.username});
     } catch(err) {
         console.log("error occured while doing login", JSON.stringify(err));
+        throw err;
     }
 }

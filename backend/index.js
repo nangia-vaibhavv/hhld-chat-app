@@ -11,17 +11,16 @@ const io = new Server(server, {
     }
 })
 
+var socketUserMap = []
 io.on('connection', (socket) => {
     console.log("connection established");
     const username = socket.handshake.query.username;
-    console.log(username)
+    socketUserMap[username] = socket;
     socket.on('listeningMessage', (msg) => {
-        // console.log("received message:", msg);
-        // socket.broadcast.emit('broadcast to all except sender', msg);
-        // io.emit('broadcast all incl sender', msg);
-        console.log(msg.msg)
-        console.log(msg.sender)
-        console.log(msg.receiver)
+        const socketToReceive = socketUserMap[msg.receiver];
+        if(socketToReceive) {
+            socketToReceive.emit('sendToFE', msg)
+        }
 
     })
 })

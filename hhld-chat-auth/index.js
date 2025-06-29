@@ -9,13 +9,13 @@ const app = express()
 app.use(express.json())
 app.use(cors({
     credentials: true,
-    origin: "http://localhost:3000"
+    origin: ["http://localhost:3000","http://localhost:3001"]
 }))
 app.use(cookieParser());
 app.use('/auth', authRouter)
 app.use('/users', userRouter)
 
-dotenv.config();
+dotenv.config(); 
 
 const PORT = process.env.PORT || 3000;
 
