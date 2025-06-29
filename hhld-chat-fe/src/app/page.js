@@ -1,9 +1,11 @@
-import Image from "next/image";
-import Chat from "./Chat";
+import Chat from "./chat/page";
 import Auth from "./auth";
+
 export default function Home() {
   return (
-    <Auth/>
-    // <Chat/>
+    <>
+      <Auth />
+      <Chat />
+    </>
   );
 }
