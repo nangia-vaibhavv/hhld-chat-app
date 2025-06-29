@@ -1,8 +1,10 @@
 'use client'
 import React, {useState} from 'react'
 import axios from 'axios'
+import { useRouter } from 'next/navigation'
 
 const Auth = () => {
+    const router = useRouter();
     const [username, setUsername ] = useState('');
     const [password, setPassword ] = useState('');
 
@@ -22,8 +24,7 @@ const Auth = () => {
                 console.log("i am failed")
             }
             else {
-                
-                console.log("i am failed")
+                router.replace('/chat');
             }
         } catch(err) {
             console.log("error while signup post call", err)
@@ -40,6 +41,8 @@ const Auth = () => {
             });
             if(res.status === 401) {
                 prompt("failed to login, invalid creds");
+            } else {
+                router.replace('/chat')
             }
             console.log("login completed");
         } catch(err) {
