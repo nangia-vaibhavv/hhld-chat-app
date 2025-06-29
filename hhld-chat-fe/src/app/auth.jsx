@@ -15,7 +15,10 @@ const Auth = () => {
             const res =await axios.post('http://localhost:8081/auth/signup', {
                 username: username,
                 password: password
-            });
+            },
+        {
+            withCredentials: true
+        });
             if(res.data.message === 'user already exist') {
                 alert(res.data.message)
                 console.log("i am failed")
