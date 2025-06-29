@@ -6,7 +6,11 @@ const Chat = () => {
     const [msg, setMsg] = useState('');
     const [socket, setSocket] = useState(null);
     useEffect(() => {
-        const newSocket = io('http://localhost:8080');
+        const newSocket = io('http://localhost:8080', {
+            query: {
+                username: 'vn'
+            }
+        });
         setSocket(newSocket);
         newSocket.on('listeningMessage', (msgrecv) => {
             console.log('received msg on client ' + msgrecv);
@@ -19,8 +23,13 @@ const Chat = () => {
     }, []);
     const sendMsg = (e) => {
         e.preventDefault();
+        const msgToBeSent = {
+            msg: msg,
+            sender: "amit",
+            receiver: 'vn'
+        }
         if (socket) {
-            socket.emit('listeningMessage', msg);
+            socket.emit('listeningMessage', msgToBeSent);
             setMsgs(prevMsgs => [...prevMsgs, {
                 text: msg, sentByCurrUser: true
             }]);
