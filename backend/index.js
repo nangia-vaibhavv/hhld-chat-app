@@ -16,7 +16,7 @@ io.on('connection', (socket) => {
     socket.on('listeningMessage', (msg) => {
         console.log("received message:", msg);
         socket.broadcast.emit('broadcast to all except sender', msg);
-        io.emit('broadcast all incl sender', msg);
+        // io.emit('broadcast all incl sender', msg);
     })
 })
 
