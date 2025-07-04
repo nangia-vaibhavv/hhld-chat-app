@@ -5,6 +5,7 @@ import { Server } from 'socket.io'
 import connectToMongo from './db/connectToMongo.js';
 import { addMsgConversation } from './msgs.controllers.js';
 import msgRouter  from './routes/msgs.routes.js';
+import cors from 'cors'
 const app = express();
 dotenv.config();
 const server = http.createServer(app);
@@ -31,7 +32,10 @@ io.on('connection', (socket) => {
         })
     })
 })
-
+app.use(cors({
+    credentials: true,
+    origin: ["http://localhost:3000","http://localhost:3001", "http://localhost:3002"]
+}))
 app.use('/msg', msgRouter);
 app.get('/', (req, res) => {
     res.status(200).json("hellow")
