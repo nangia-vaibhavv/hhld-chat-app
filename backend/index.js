@@ -4,6 +4,7 @@ import http from 'http'
 import { Server } from 'socket.io'
 import connectToMongo from './db/connectToMongo.js';
 import { addMsgConversation } from './msgs.controllers.js';
+import msgRouter  from './routes/msgs.routes.js';
 const app = express();
 dotenv.config();
 const server = http.createServer(app);
@@ -31,6 +32,7 @@ io.on('connection', (socket) => {
     })
 })
 
+app.use('/msg', msgRouter);
 app.get('/', (req, res) => {
     res.status(200).json("hellow")
 })
