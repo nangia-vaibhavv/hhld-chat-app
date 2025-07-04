@@ -22,8 +22,9 @@ export const getMsgsForConversation = async (req, res) => {
         const conversation = await Conversation.findOne({users: { $all: participants}});
         if(!conversation) {
             console.log("no conversation found");
+            res.status(404).json("no conversation found")
         }
-        return res.json(conversation.msgs);
+        return res.status(200).json(conversation.msgs);
     } catch(err) {
         console.log("error occured while fetching messages", err)
     }
