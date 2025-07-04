@@ -41,7 +41,7 @@ const Chat = () => {
     const sendMsg = (e) => {
         e.preventDefault();
         const msgToBeSent = {
-            msg: msg,
+            text: msg,
             sender: authName,
             receiver: chatReceiver
         }

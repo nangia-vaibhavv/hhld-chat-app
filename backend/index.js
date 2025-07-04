@@ -2,6 +2,8 @@ import express from 'express'
 import dotenv from 'dotenv'
 import http from 'http'
 import { Server } from 'socket.io'
+import connectToMongo from './db/connectToMongo.js';
+import { addMsgConversation } from './msgs.controllers.js';
 const app = express();
 dotenv.config();
 const server = http.createServer(app);
@@ -21,7 +23,11 @@ io.on('connection', (socket) => {
         if(socketToReceive) {
             socketToReceive.emit('sendToFE', msg)
         }
-
+        addMsgConversation([msg.sender, msg.receiver], {
+            text: msg.text,
+            sender: msg.sender,
+            receiver: msg.receiver
+        })
     })
 })
 
@@ -29,6 +35,7 @@ app.get('/', (req, res) => {
     res.status(200).json("hellow")
 })
 const PORT = process.env.PORT || 3000;
+connectToMongo();
 server.listen((PORT), () => {
     console.log("server is up and running on port", PORT)
 })
