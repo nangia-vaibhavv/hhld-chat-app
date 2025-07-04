@@ -2,12 +2,13 @@
 import React, {useState} from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import {useAuthStore } from './zustand/useAuthStore.js'
 
 const Auth = () => {
     const router = useRouter();
     const [username, setUsername ] = useState('');
     const [password, setPassword ] = useState('');
-
+    const {authName, updateAuthName} = useAuthStore()
 
     const signUpFunc = async (e) => {
         e.preventDefault();
@@ -24,6 +25,7 @@ const Auth = () => {
                 console.log("i am failed")
             }
             else {
+                updateAuthName(username);
                 router.replace('/chat');
             }
         } catch(err) {
@@ -38,10 +40,14 @@ const Auth = () => {
             const res = await axios.post("http://localhost:8081/auth/login", {
                 username: username,
                 password: password
-            });
+            },
+        {
+            withCredentials: true
+        });
             if(res.status === 401) {
                 prompt("failed to login, invalid creds");
             } else {
+                updateAuthName(username);
                 router.replace('/chat')
             }
             console.log("login completed");
