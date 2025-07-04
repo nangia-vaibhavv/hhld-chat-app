@@ -35,7 +35,6 @@ const Chat = () => {
                     false
             }]);
         });
-
         getUsersData();
         return () => newSocket.close();
     }, [authName]);
@@ -44,7 +43,7 @@ const Chat = () => {
         const msgToBeSent = {
             msg: msg,
             sender: authName,
-            receiver: 'vaibhav@gmail.com'
+            receiver: chatReceiver
         }
         if (socket) {
             socket.emit('listeningMessage', msgToBeSent);
@@ -59,10 +58,8 @@ const Chat = () => {
         <div className='w-1/5 bg-amber-300'> 
         <ChatUsers/>
         </div>
-        <div>
-            <h1>{authName} chat between {chatReceiver} </h1>
-        </div>
         <div className='w-4/5 flex flex-col bg-amber-200'>
+        <h1>{authName} chat between {chatReceiver} </h1>
             <div className='msgs-container h-4/5 overflow-scroll'>
                 {msgs.map((msg, index) => (
                     <div key={index} className={` m-3 ${msg.sentByCurrUser ?

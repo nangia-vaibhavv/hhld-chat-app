@@ -40,7 +40,10 @@ const Auth = () => {
             const res = await axios.post("http://localhost:8081/auth/login", {
                 username: username,
                 password: password
-            });
+            },
+        {
+            withCredentials: true
+        });
             if(res.status === 401) {
                 prompt("failed to login, invalid creds");
             } else {
