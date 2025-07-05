@@ -4,7 +4,7 @@ import io from "socket.io-client";
 import { useAuthStore } from '../zustand/useAuthStore.js'
 import { useUsersStore } from '../zustand/useUsersStore.js';
 import axios from 'axios';
-import ChatUsers from '../_components/chatUsers.jsx';
+import ChatUsers from '../_components/ChatUsers.jsx';
 import { useChatReceiverStore }  from '../zustand/useChatReceiverStore.js'
 import { useChatMsgsStore } from '../zustand/useChatMsgsStore.js';
 const Chat = () => {
