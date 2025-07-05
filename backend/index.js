@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 import http from 'http'
 import { Server } from 'socket.io'
 import connectToMongo from './db/connectToMongo.js';
-import { addMsgConversation } from './msgs.controllers.js';
+import { addMsgConversation } from './controllers/msgs.controllers.js';
 import msgRouter  from './routes/msgs.routes.js';
 import cors from 'cors'
 const app = express();

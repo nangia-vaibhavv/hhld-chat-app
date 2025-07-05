@@ -6,13 +6,15 @@ import { useUsersStore } from '../zustand/useUsersStore.js';
 import axios from 'axios';
 import ChatUsers from '../_components/chatUsers.jsx';
 import { useChatReceiverStore }  from '../zustand/useChatReceiverStore.js'
+import { useChatMsgsStore } from '../zustand/useChatMsgsStore.js';
 const Chat = () => {
-    const [msgs, setMsgs] = useState([]);
+    // const [msgs, setMsgs] = useState([]);
     const [msg, setMsg] = useState('');
     const [socket, setSocket] = useState(null);
     const { authName, updateAuthname} = useAuthStore();
     const { users, updateUsers } = useUsersStore();
     const { chatReceiver } = useChatReceiverStore();
+    const { chatMsgs, updateChatMsgs } = useChatMsgsStore();
     const getUsersData = async () => {
         const res = await axios.get('http://localhost:8081/users', {
             withCredentials: true
@@ -30,10 +32,12 @@ const Chat = () => {
         });
         setSocket(newSocket);
         newSocket.on('sendToFE', (msgrecv) => {
-            setMsgs(prevMsgs => [...prevMsgs, {
-                text: msgrecv.msg, sentByCurrUser:
-                    false
-            }]);
+            console.log("msg received", msgrecv.text)
+            updateChatMsgs([...chatMsgs, msgrecv])
+            // setMsgs(prevMsgs => [...prevMsgs, {
+            //     text: msgrecv.msg, sentByCurrUser:
+            //         false
+            // }]);
         });
         getUsersData();
         return () => newSocket.close();
@@ -47,30 +51,32 @@ const Chat = () => {
         }
         if (socket) {
             socket.emit('listeningMessage', msgToBeSent);
-            setMsgs(prevMsgs => [...prevMsgs, {
-                text: msg, sentByCurrUser: true
-            }]);
+            updateChatMsgs([...chatMsgs, msgToBeSent]);
+            // setMsgs(prevMsgs => [...prevMsgs, {
+            //     text: msg, sentByCurrUser: true
+            // }]);
             setMsg('');
         }
     }
     return (
         <div className='h-screen flex'>
-        <div className='w-1/5 bg-amber-300'> 
-        <ChatUsers/>
-        </div>
-        <div className='w-4/5 flex flex-col bg-amber-200'>
-        <h1>{authName} chat between {chatReceiver} </h1>
-            <div className='msgs-container h-4/5 overflow-scroll'>
-                {msgs.map((msg, index) => (
-                    <div key={index} className={` m-3 ${msg.sentByCurrUser ?
-                        'text-right' : 'text-left'}`}>
-                        <span className={`${msg.sentByCurrUser ? 'bg-blue-200' :
-                            'bg-green-200'} p-3 rounded-lg`}>
-                            {msg.text}
-                        </span>
-                    </div>
-                ))}
+            <div className='w-1/5 bg-amber-300'>
+                <ChatUsers />
             </div>
+            <div className='w-4/5 flex flex-col bg-amber-200'>
+                <h1>{authName} chat between {chatReceiver} </h1>
+                <div className='msgs-container h-4/5 overflow-scroll'>
+                    {chatMsgs?.map((msg, index) => (
+                        <div key={index} className={`m-3 p-1 ${msg.sender === authName ? 'text-right'
+                            : 'text-left'}`}>
+                            <span className={`p-2 rounded-2xl ${msg.sender === authName ?
+                                'bg-blue-200' : 'bg-green-200'}`}>
+                                {msg.text}
+                            </span>
+                        </div>
+                    ))}
+
+                </div>
             <div className='h-1/5 flex items-center justify-center'>
                 <form onSubmit={sendMsg} className="w-1/2">
                     <div className="relative">

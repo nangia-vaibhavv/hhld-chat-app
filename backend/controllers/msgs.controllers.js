@@ -1,8 +1,8 @@
-import Conversation from "./models/chat.models.js";
+import Conversation from "../models/chat.models.js";
 
 export const addMsgConversation = async (participants, msg) => {
     try {
-        const conversation = await Conversation.findOne({
+        let conversation = await Conversation.findOne({
             users: { $all: participants }
         })
         if(!conversation) {
@@ -19,10 +19,10 @@ export const getMsgsForConversation = async (req, res) => {
     try {
         const { sender, receiver } = req.query;
         const participants = [sender, receiver];
-        const conversation = await Conversation.findOne({users: { $all: participants}});
+        let conversation = await Conversation.findOne({users: { $all: participants}});
         if(!conversation) {
             console.log("no conversation found");
-            res.status(404).json("no conversation found")
+            return res.status(404).json("no conversation found")
         }
         return res.status(200).json(conversation.msgs);
     } catch(err) {
