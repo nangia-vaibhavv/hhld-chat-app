@@ -2,6 +2,6 @@
 
 Docker Commands:
 
-docker build -t hhld/chat-be:latest .
-docker build -t hhld/chat-auth-be:latest .
-docker build -t hhld/chat-fe:latest .
+1. docker build -t hhld/chat-be:latest .
+2. docker build -t hhld/chat-auth-be:latest .
+3. docker build -t hhld/chat-fe:latest .
